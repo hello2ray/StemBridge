@@ -1,34 +1,22 @@
-# StemBridge clickable Streamlit MVP
+# StemBridge – Streamlit classroom prototype
 
-A classroom/demo-only standalone prototype based on the supplied StemBridge pitch deck. It uses fictional information and local Streamlit session state; data is not saved permanently.
+Includes private fictional demo patient views, personalized transplant journey, care coordination, finance demonstration, NMDP **reference links only**, and an NCI/ACS source-linked educational FAQ chat.
 
-## Run on Ubuntu, Windows, or macOS
-
-1. Install Python 3.10+.
-2. In a terminal, open this folder.
-3. Run:
+## Run
 
 ```bash
-python -m pip install -r requirements.txt
-python -m streamlit run app.py
+python3 -m pip install -r requirements.txt
+python3 -m streamlit run app.py
 ```
 
-4. Open the local URL printed by Streamlit (usually http://localhost:8501).
+Open http://localhost:8501
 
-## Demonstration path
+Demo login: `alex` / `Alex2026!`. Other fictional logins: `priya` / `Priya2026!`, `daniel` / `Daniel2026!`, `maya` / `Maya2026!`.
 
-Welcome → Today → Journey → My Care → Chat → Caregiver → Finance → Match Finder → Support.
+## Match Finder
+Three tabs: **Donor search** (NMDP links), **Donor campaign** (NMDP donor-recruitment references), **NMDP fundraiser** (official fundraising references). No donor matching, API access, campaign creation, or payments.
 
-Try checking off a task, adding a symptom note, adding a question, updating finance status, and switching between Patient and Caregiver roles in the sidebar. Turn off sharing as Patient, then switch to Caregiver to see the limited demo access behavior.
+## Chat
+Curated educational Q&A, paraphrased from official NCI and American Cancer Society pages with links to original sources. Not a generative chatbot and does not automatically update from the websites.
 
-## Safety and scope
-
-- Not a clinical product. No diagnosis, treatment advice, or triage.
-- Chat uses fixed demo replies, not a live AI model.
-- Match Finder only explains the registry process. No actual matching, ranking, or donor identities.
-- Financial statuses are user-entered notes; no verified eligibility, approvals, or payment.
-- Caregiver access is a UI simulation, not production authentication/authorization.
-- No EHR, hospital, registry, or insurer integration.
-- Do not enter real patient or sensitive data.
-
-For real-world deployment, the project would need clinical, privacy, security, accessibility, and research ethics reviews.
+**Safety:** Entire project uses fictional data and demonstration credentials. Login/session isolation is not production security. Do not enter real health or donor information. Session data is not persistent across logouts. No clinical advice.

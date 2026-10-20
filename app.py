@@ -1,6 +1,8 @@
 import streamlit as st
 from datetime import date
 from html import escape
+from nmdp_features import render_nmdp_features
+from chat_knowledge import FAQ, NCI, ACS, answer
 
 st.set_page_config(page_title='StemBridge | Patient Journey', page_icon='💙', layout='wide', initial_sidebar_state='expanded')
 st.markdown('''<style>
@@ -289,16 +291,32 @@ elif page=='My Care':
             q=st.text_input('Add a question')
             if st.form_submit_button('Save question') and q.strip():st.session_state.questions.append(q.strip());st.rerun()
 elif page=='Chat':
-    heading('💬 Ask StemBridge','A friendly demo guide for general questions. No real AI or medical advice.')
-    st.info('Try asking about appointments, caregivers, the journey, donor registries, or financial support.')
-    answers={'caregiver':'A caregiver can help with rides, daily tasks, and reminders. You decide what to share.','appointment':'Write down questions and confirm details with your care team.','donor':'Your transplant team and authorized registries manage donor searches. This demo does not match donors.','match':'Only authorized professionals can assess donor suitability. Use Match Finder to organize questions.','campaign':'The Finance page lets you draft a sample support campaign. It does not publish a fundraiser or collect money.','financial':'Use Finance to track coverage questions, paperwork, and a sample support campaign.','insurance':'Ask your insurer or financial navigator to confirm coverage and requirements.','journey':'The Journey page shows a sample timeline. Your care team determines your treatment plan.'}
-    for role,msg in st.session_state.chat:
-        with st.chat_message(role):st.write(msg)
-    prompt=st.chat_input('Ask a general question…')
+    heading('💬 Ask StemBridge', 'Educational answers based on the National Cancer Institute (NCI) and American Cancer Society (ACS).')
+    st.info('This is a curated educational FAQ, not a live AI model. It cannot diagnose, interpret test results, or give personal medical instructions.')
+    with st.expander('Choose a suggested question', expanded=not bool(st.session_state.chat)):
+        for index, item in enumerate(FAQ):
+            if st.button(item[0], key=f'faq_{index}', use_container_width=True):
+                st.session_state.chat.append(('user', item[0], []))
+                response, sources = answer(item[1][0])
+                st.session_state.chat.append(('assistant', response, sources))
+                st.rerun()
+    for entry in st.session_state.chat:
+        role, msg = entry[0], entry[1]
+        sources = entry[2] if len(entry) > 2 else []
+        with st.chat_message(role):
+            st.write(msg)
+            for label, url in sources:
+                st.markdown(f'[{label} source]({url})')
+    prompt=st.chat_input('Ask about transplants, donors, Day 0, engraftment, GVHD…')
     if prompt:
-        st.session_state.chat.append(('user',prompt))
-        reply=next((v for k,v in answers.items() if k in prompt.lower()),'I can help organize questions and guide you to the right page. Please ask your care team for medical advice.')
-        st.session_state.chat.append(('assistant',reply));st.rerun()
+        response, sources = answer(prompt)
+        st.session_state.chat.append(('user', prompt, []))
+        st.session_state.chat.append(('assistant', response, sources))
+        st.rerun()
+    st.markdown('**Official patient education sources**')
+    st.link_button('NCI: Stem Cell Transplants ↗', NCI)
+    st.link_button('ACS: Stem Cell or Bone Marrow Transplant ↗', ACS)
+    st.caption('Summaries are paraphrased from the linked sources. For symptoms or medical decisions, contact your transplant team.')
 elif page=='Caregiver':
     heading('🤝 Caregiver coordination','Share practical tasks while keeping patient choice at the center.')
     if st.session_state.role=='Patient':
@@ -356,13 +374,12 @@ elif page=='Finance':
                         st.session_state.campaigns=[x for x in st.session_state.campaigns if x['id']!=cid];st.session_state.demo_pledges.pop(cid,None);st.rerun()
         st.info('A real fundraising feature would need patient consent, privacy review, identity verification, secure payment processing, fraud safeguards, and clear terms before launch.')
 elif page=='Match Finder':
-    hero('Donor-search guide','Know which questions to ask and where to find trusted answers.','MATCH FINDER • GUIDANCE ONLY')
-    st.warning('This prototype cannot search registries, rank donors, or determine compatibility. Only authorized transplant professionals can do that.')
-    for title,detail in [('01  Talk with your transplant team','Ask whether a donor search is part of the treatment plan.'),('02  Understand registry coordination','The transplant team may work with authorized donor registries.'),('03  Track questions and updates','Write down follow-up questions without collecting donor identities.'),('04  Review next steps','Discuss decisions and timelines directly with the clinical team.')]:
-        with st.expander(title):st.write(detail)
-    with st.form('match_questions',clear_on_submit=True):
-        q=st.text_input('Question for your transplant coordinator')
-        if st.form_submit_button('Save to My Care') and q.strip():st.session_state.questions.append(q.strip());st.success('Saved in My Care → Questions')
+    patient=selected_patient()
+    render_nmdp_features(
+        patient_id=patient['id'],
+        transplant_type=patient['type'],
+        questions=st.session_state.questions,
+    )
 elif page=='Support':
     heading('🌿 Support resources','Organize practical questions and find the right people to ask.')
     for name,desc in [('Care team','Keep questions and appointment reminders together.'),('Travel and lodging','List travel needs and ask your center about available options.'),('Financial navigator','Prepare coverage and assistance questions.'),('Emotional support','Ask your transplant center about counseling and support groups.')]:
