@@ -1,33 +1,191 @@
-"""Short educational paraphrases based on NCI and ACS public patient guides.
-This is a curated keyword FAQ, not an AI model, medical advice, or live web retrieval.
+
 """
-NCI = 'https://www.cancer.gov/about-cancer/treatment/types/stem-cell-transplant'
-ACS = 'https://www.cancer.org/cancer/treatment-types/stem-cell-transplant.html'
-ACS_TYPES = 'https://www.cancer.org/cancer/treatment-types/stem-cell-transplant/types-of-transplants.html'
-ACS_DONOR = 'https://www.cancer.org/cancer/treatment-types/stem-cell-transplant/finding-a-donor.html'
-ACS_PROCESS = 'https://www.cancer.org/cancer/treatment-types/stem-cell-transplant/process.html'
+StemBridge Educational Chatbot
+
+This is a keyword-based educational FAQ.
+It is not a generative AI model.
+It does not provide medical advice.
+"""
+
+NCI = (
+    "https://www.cancer.gov/about-cancer/"
+    "treatment/types/stem-cell-transplant"
+)
+
+ACS = (
+    "https://www.cancer.org/cancer/"
+    "treatment-types/stem-cell-transplant.html"
+)
+
+NMDP = "https://www.nmdp.org/"
+GIFT_OF_LIFE = "https://www.giftoflife.org/"
+DKMS = "https://www.dkms.org/"
+WMDA = "https://wmda.info/"
 
 FAQ = [
-    ('What is a stem cell transplant?', ('what is a stem cell', 'stem cell transplant', 'bone marrow transplant', 'hsct'), 'A blood stem cell transplant restores blood-forming cells after disease or treatment has damaged them. Healthy stem cells are given through a vein and can grow into new blood cells.', [('NCI', NCI), ('ACS', ACS)]),
-    ('Autologous vs. allogeneic', ('autologous', 'allogeneic', 'auto transplant', 'allo transplant', 'types of transplant', 'own cells'), 'An autologous transplant uses your own collected stem cells. An allogeneic transplant uses stem cells from another person. Your care team decides which approach may be suitable.', [('NCI', NCI), ('ACS', ACS_TYPES)]),
-    ('What is HLA matching?', ('hla', 'tissue match', 'donor matching', 'find a donor', 'donor search', 'match donor'), 'HLA markers help the transplant team evaluate whether donor cells may be compatible with a patient. The team checks these and other factors before selecting a donor.', [('NCI', NCI), ('ACS', ACS_DONOR)]),
-    ('What happens on Day 0?', ('day 0', 'day zero', 'transplant day', 'infusion'), 'Day 0 is the day blood-forming stem cells are infused through an IV line. The care team monitors the patient during and after the infusion.', [('NCI', NCI), ('ACS', ACS_PROCESS)]),
-    ('What is engraftment?', ('engraft', 'blood counts', 'new blood cells'), 'Engraftment means the transplanted stem cells begin producing new blood cells. The care team follows blood counts to monitor this process.', [('ACS', ACS), ('NCI', NCI)]),
-    ('What is conditioning?', ('conditioning', 'chemotherapy', 'radiation', 'pre transplant treatment'), 'Conditioning is treatment given before the transplant, often chemotherapy and sometimes radiation. It prepares the body for the transplant; the exact plan varies.', [('ACS', ACS), ('NCI', NCI)]),
-    ('What is GVHD?', ('gvhd', 'graft versus host', 'graft-versus-host'), 'Graft-versus-host disease can occur after an allogeneic transplant when donor immune cells attack the recipient’s tissues. Your transplant team monitors for this complication.', [('NCI', NCI), ('ACS', ACS)]),
-    ('What side effects are possible?', ('side effect', 'infection', 'nausea', 'mouth sore', 'fatigue', 'tired', 'risk'), 'Transplant treatment may cause infection risk, fatigue, nausea, mouth sores, and other short- or long-term problems. Tell your transplant team about symptoms; they can explain what matters for you.', [('NCI', NCI), ('ACS', ACS)]),
-    ('What does a caregiver do?', ('caregiver', 'family help', 'care partner'), 'Caregivers may help with appointments, daily care, transport, and watching for concerns after discharge. The transplant team should explain the responsibilities and available support.', [('ACS', ACS)]),
-    ('How long is recovery?', ('recover', 'recovery', 'how long', 'follow-up'), 'Recovery and follow-up can take months or longer and vary widely. Your team checks blood counts and other health concerns and explains your individual recovery plan.', [('NCI', NCI), ('ACS', ACS_PROCESS)]),
-    ('How do I decide about transplant?', ('decide', 'decision', 'benefit', 'success rate', 'eligible'), 'A transplant has potential benefits and serious risks. Discuss your diagnosis, treatment options, expected benefits, and possible complications with your transplant team before deciding.', [('ACS', ACS), ('NCI', NCI)]),
+    (
+        "What is a stem cell transplant?",
+        ("stem cell transplant", "bone marrow transplant"),
+        "A stem cell transplant provides blood-forming "
+        "stem cells that can develop into new blood cells.",
+        [("NCI", NCI)]
+    ),
+
+    (
+        "Autologous vs Allogeneic",
+        ("autologous", "allogeneic", "transplant type"),
+        "Autologous transplants use the patient's own stem cells. "
+        "Allogeneic transplants use donor stem cells.",
+        [("NCI", NCI), ("ACS", ACS)]
+    ),
+
+    (
+        "How does donor search work?",
+        ("donor search", "donor matching", "hla"),
+        "For allogeneic transplants, the transplant center "
+        "coordinates HLA testing, donor search, and donor selection. "
+        "StemBridge cannot identify matching donors.",
+        [("NMDP", NMDP)]
+    ),
+
+    (
+        "What donor registries are available?",
+        ("donor registry", "registries", "gift of life", "dkms"),
+        "Organizations include NMDP, Gift of Life, DKMS, "
+        "Anthony Nolan, DATRI, Canadian Blood Services, "
+        "and the international WMDA network. "
+        "The transplant center manages the actual donor search.",
+        [
+            ("NMDP", NMDP),
+            ("Gift of Life", GIFT_OF_LIFE),
+            ("DKMS", DKMS),
+            ("WMDA", WMDA)
+        ]
+    ),
+
+    (
+        "What is HLA matching?",
+        ("hla matching", "hla typing", "tissue matching"),
+        "HLA markers help the transplant team evaluate "
+        "donor compatibility. Other factors are also considered.",
+        [("NMDP", NMDP)]
+    ),
+
+    (
+        "What is conditioning?",
+        ("conditioning", "chemotherapy", "radiation"),
+        "Conditioning is treatment given before transplant, "
+        "often chemotherapy and sometimes radiation.",
+        [("NCI", NCI)]
+    ),
+
+    (
+        "What happens on Day 0?",
+        ("day 0", "day zero", "infusion"),
+        "Day 0 is the day stem cells are infused into the patient.",
+        [("ACS", ACS)]
+    ),
+
+    (
+        "What is engraftment?",
+        ("engraftment", "engraft", "anc"),
+        "Engraftment means transplanted stem cells begin "
+        "producing new blood cells. The care team monitors "
+        "blood counts to assess recovery.",
+        [("NCI", NCI)]
+    ),
+
+    (
+        "What is GVHD?",
+        ("gvhd", "graft versus host"),
+        "Graft-versus-host disease can happen after an "
+        "allogeneic transplant when donor immune cells "
+        "attack the patient's tissues.",
+        [("NCI", NCI)]
+    ),
+
+    (
+        "How long does recovery take?",
+        ("recovery", "recover", "day +100"),
+        "Recovery varies from person to person. "
+        "Follow-up may continue for months or years.",
+        [("NCI", NCI)]
+    ),
+
+    (
+        "Where can I get financial help?",
+        ("financial", "insurance", "cost", "grant"),
+        "Ask your transplant center's financial counselor. "
+        "You can also explore the StemBridge Financial Help page.",
+        [("NMDP", NMDP)]
+    ),
+
+    (
+        "How do I find a transplant center?",
+        ("transplant center", "hospital", "find center"),
+        "Use the StemBridge Transplant Centers page "
+        "and confirm services directly with each hospital.",
+        [("NMDP", NMDP)]
+    ),
+
+    (
+        "How do I get a second opinion?",
+        ("second opinion", "another doctor"),
+        "You can ask your current care team for a referral "
+        "or contact another transplant center. "
+        "Check insurance and required medical records.",
+        [("NCI", NCI)]
+    ),
+
+    (
+        "What does a caregiver do?",
+        ("caregiver", "family support"),
+        "Caregivers may help with transportation, "
+        "daily activities, appointments, and practical support.",
+        [("NMDP", NMDP)]
+    )
 ]
 
-EMERGENCY_TERMS = ('chest pain', 'trouble breathing', 'cannot breathe', 'severe bleeding', 'unconscious', 'emergency', 'high fever', 'fever after transplant')
+
+URGENT_TERMS = (
+    "chest pain",
+    "trouble breathing",
+    "cannot breathe",
+    "severe bleeding",
+    "unconscious",
+    "high fever",
+    "fever",
+    "emergency",
+    "shortness of breath"
+)
+
 
 def answer(question: str):
+
     text = question.lower().strip()
-    if any(term in text for term in EMERGENCY_TERMS):
-        return ('This could need urgent medical attention. Contact your transplant team immediately or seek emergency care. StemBridge cannot assess symptoms.', [])
-    for _, phrases, response, sources in FAQ:
+
+    if any(term in text for term in URGENT_TERMS):
+
+        return (
+            "This may need urgent medical attention. "
+            "Contact your transplant team immediately "
+            "or seek emergency care. "
+            "For life-threatening symptoms, call emergency services. "
+            "StemBridge cannot assess symptoms.",
+            []
+        )
+
+    for title, phrases, response, sources in FAQ:
+
         if any(phrase in text for phrase in phrases):
             return response, sources
-    return ('I do not have a verified answer to that question in my NCI/ACS guide. Please ask your transplant team. You can also open the official guides below.', [('NCI', NCI), ('ACS', ACS)])
+
+    return (
+        "I do not have a verified answer to that question. "
+        "Please ask your transplant team or use "
+        "the official educational resources.",
+        [
+            ("NCI", NCI),
+            ("ACS", ACS)
+        ]
+    )
