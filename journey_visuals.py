@@ -1,493 +1,354 @@
 
-"""
-StemBridge - Visual Transplant Journey
-=====================================
-
-Features:
-- Autologous and allogeneic transplant journeys
-- Clickable stage cards
-- Cross-platform light/dark theme contrast
-- Visual three-step process
-- Short stage explanations
-- Common checks and questions
-- Expandable detailed education
-- Previous / Next stage navigation
-- Accessible native Streamlit controls
-
-Integration:
-    from journey_visuals import render_journey
-    render_journey(phases, is_allo)
-
-Educational prototype only.
-"""
+"""StemBridge visual journey. Drop-in replacement; render_journey(phases, is_allo)."""
 
 from html import escape
 import streamlit as st
 
 
-# ============================================================
-# 1. AUTOLOGOUS TRANSPLANT STAGES
-# ============================================================
-
 AUTO = [
-    {
-        "icon": "🩺",
-        "name": "Diagnosis",
-        "short": "Understand the treatment plan",
-        "color": "#E8F1FF",
-        "steps": [
-            ("🔎", "Understand diagnosis"),
-            ("💬", "Discuss treatment"),
-            ("📋", "Plan next steps"),
+    dict(
+        icon='🩺',
+        name='Diagnosis',
+        short='Understand the plan',
+        color='#e8f1ff',
+        steps=[
+            'Understand diagnosis',
+            'Discuss treatment options',
+            'Plan next steps'
         ],
-        "tests": [
-            "Diagnosis-specific tests",
-            "Treatment history review",
+        tests=[
+            'Diagnosis-specific tests',
+            'Treatment history review'
         ],
-        "questions": [
-            "Why is transplant being considered?",
-            "What alternatives are available?",
+        ask=[
+            'Why is a transplant being considered?',
+            'What other treatments are possible?'
         ],
-        "detail": (
-            "Your team explains the diagnosis, treatment goals, "
-            "and why an autologous transplant may be considered."
-        ),
-        "terms": {
-            "Autologous": "Using the patient's own stem cells.",
-            "Remission": "A reduction or disappearance of signs of disease.",
-        },
-    },
-    {
-        "icon": "🫀",
-        "name": "Evaluation",
-        "short": "Check transplant readiness",
-        "color": "#FFF1E8",
-        "steps": [
-            ("📄", "Review health"),
-            ("🫀", "Check organs"),
-            ("🤝", "Plan support"),
+        detail='Your team explains the diagnosis, goals of treatment, and whether a transplant may be appropriate.'
+    ),
+    dict(
+        icon='🫀',
+        name='Evaluation',
+        short='Check transplant readiness',
+        color='#fff1e8',
+        steps=[
+            'Review medical history',
+            'Check heart and lungs',
+            'Discuss support needs'
         ],
-        "tests": [
-            "Blood counts",
-            "Heart and lung assessments",
-            "Infection screening",
+        tests=[
+            'Blood counts and organ function',
+            'Infection screening',
+            'Heart and lung assessments'
         ],
-        "questions": [
-            "Which tests will I need?",
-            "What could change the transplant plan?",
+        ask=[
+            'Which tests do I need?',
+            'What could change the plan?'
         ],
-        "detail": (
-            "The transplant team assesses disease status, "
-            "organ function, infections, and practical readiness."
-        ),
-        "terms": {
-            "CBC": "Complete blood count.",
-            "Conditioning": "Treatment used to prepare for transplant.",
-        },
-    },
-    {
-        "icon": "🩸",
-        "name": "Stem Cell Collection",
-        "short": "Collect and store stem cells",
-        "color": "#FFF0F0",
-        "steps": [
-            ("💉", "Mobilize cells"),
-            ("🩸", "Collect cells"),
-            ("❄️", "Store cells"),
+        detail='The transplant team assesses overall health, disease status, and practical readiness.'
+    ),
+    dict(
+        icon='🩸',
+        name='Stem Cell Collection',
+        short='Collect and store cells',
+        color='#fff0f0',
+        steps=[
+            'Mobilize stem cells',
+            'Collect by apheresis',
+            'Store collected cells'
         ],
-        "tests": [
-            "Blood counts",
-            "Stem cell collection yield",
+        tests=[
+            'Blood counts',
+            'Collection yield'
         ],
-        "questions": [
-            "How long will collection take?",
-            "Will I need a central line?",
+        ask=[
+            'How long will collection take?',
+            'Will I need a central line?'
         ],
-        "detail": (
-            "Medicines may move stem cells into the bloodstream. "
-            "The cells are collected through apheresis and stored "
-            "for later infusion."
-        ),
-        "terms": {
-            "Mobilization": "Moving stem cells into the bloodstream.",
-            "Apheresis": "A procedure that separates and collects cells from blood.",
-        },
-    },
-    {
-        "icon": "💊",
-        "name": "Conditioning",
-        "short": "Prepare the body for infusion",
-        "color": "#F3ECFF",
-        "steps": [
-            ("💊", "Start treatment"),
-            ("🛡️", "Manage effects"),
-            ("📅", "Prepare for Day 0"),
+        detail='Medicines may help move stem cells into the bloodstream. The cells are collected and stored for later infusion.'
+    ),
+    dict(
+        icon='💊',
+        name='Conditioning',
+        short='Prepare for infusion',
+        color='#f3ecff',
+        steps=[
+            'Start conditioning',
+            'Manage side effects',
+            'Prepare for Day 0'
         ],
-        "tests": [
-            "Blood counts",
-            "Organ function",
-            "Infection monitoring",
+        tests=[
+            'Blood counts',
+            'Organ function',
+            'Infection monitoring'
         ],
-        "questions": [
-            "What side effects should I expect?",
-            "Will I stay in the hospital?",
+        ask=[
+            'What side effects should I expect?',
+            'Will I be in hospital?'
         ],
-        "detail": (
-            "High-dose treatment prepares the body before "
-            "the collected stem cells are returned."
-        ),
-        "terms": {
-            "Conditioning": "Chemotherapy, sometimes with radiation, before transplant.",
-            "Supportive care": "Care that helps manage symptoms and complications.",
-        },
-    },
-    {
-        "icon": "💧",
-        "name": "Day 0",
-        "short": "Receive your stem cells",
-        "color": "#E8F7FF",
-        "steps": [
-            ("💧", "Cell infusion"),
-            ("🩺", "Monitor"),
-            ("🌱", "Watch engraftment"),
+        detail='High-dose treatment prepares the body before the collected cells are returned.'
+    ),
+    dict(
+        icon='💧',
+        name='Day 0',
+        short='Receive stem cells',
+        color='#e8f7ff',
+        steps=[
+            'Stem cell infusion',
+            'Supportive monitoring',
+            'Watch for engraftment'
         ],
-        "tests": [
-            "Blood counts",
-            "Vital signs",
-            "Engraftment monitoring",
+        tests=[
+            'Blood counts',
+            'Vital signs',
+            'Infection monitoring'
         ],
-        "questions": [
-            "How does the infusion work?",
-            "When might engraftment occur?",
+        ask=[
+            'How does the infusion work?',
+            'How will we know engraftment has started?'
         ],
-        "detail": (
-            "Stored stem cells are infused through a vein. "
-            "The transplant team monitors blood-cell recovery "
-            "and possible complications."
-        ),
-        "terms": {
-            "Day 0": "The day stem cells are infused.",
-            "Engraftment": "When transplanted cells begin producing new blood cells.",
-        },
-    },
-    {
-        "icon": "🏠",
-        "name": "Early Recovery",
-        "short": "Monitor and recover",
-        "color": "#FFF5E4",
-        "steps": [
-            ("🧪", "Check counts"),
-            ("📅", "Attend follow-ups"),
-            ("🏠", "Follow precautions"),
+        detail='Stored stem cells are infused through a vein. The team monitors blood-cell recovery and complications.'
+    ),
+    dict(
+        icon='🏠',
+        name='Early Recovery',
+        short='Monitor and recover',
+        color='#fff5e4',
+        steps=[
+            'Monitor blood counts',
+            'Attend follow-ups',
+            'Follow safety guidance'
         ],
-        "tests": [
-            "Blood counts",
-            "Infection checks",
-            "Disease response monitoring",
+        tests=[
+            'Blood counts',
+            'Infection checks',
+            'Disease response'
         ],
-        "questions": [
-            "When should I contact my team?",
-            "What precautions apply at home?",
+        ask=[
+            'When should I call the care team?',
+            'What precautions apply at home?'
         ],
-        "detail": (
-            "During early recovery, the team monitors blood counts, "
-            "infections, symptoms, and treatment response."
-        ),
-        "terms": {
-            "ANC": "Absolute neutrophil count, a measure of infection-fighting cells.",
-            "Platelets": "Blood components that help with clotting.",
-        },
-    },
-    {
-        "icon": "🌱",
-        "name": "Long-Term Care",
-        "short": "Support long-term wellness",
-        "color": "#E9F8ED",
-        "steps": [
-            ("📅", "Follow-up"),
-            ("💉", "Review vaccines"),
-            ("🌱", "Monitor wellness"),
+        detail='The team monitors recovery closely, particularly during the early months after transplant.'
+    ),
+    dict(
+        icon='🌱',
+        name='Long-Term Care',
+        short='Plan ongoing wellness',
+        color='#e9f8ed',
+        steps=[
+            'Long-term follow-up',
+            'Review vaccines',
+            'Monitor late effects'
         ],
-        "tests": [
-            "Disease surveillance",
-            "Long-term health screening",
+        tests=[
+            'Disease surveillance',
+            'Long-term health screening'
         ],
-        "questions": [
-            "What is my follow-up schedule?",
-            "When should vaccines be reviewed?",
+        ask=[
+            'What is my follow-up schedule?',
+            'When should vaccines be reviewed?'
         ],
-        "detail": (
-            "Long-term care may include disease monitoring, "
-            "vaccination planning, and screening for late effects."
-        ),
-        "terms": {
-            "Survivorship": "Long-term health and well-being after treatment.",
-            "Late effects": "Health problems that may appear months or years later.",
-        },
-    },
+        detail='Long-term follow-up may include disease monitoring, revaccination, and attention to late effects.'
+    ),
 ]
 
-
-# ============================================================
-# 2. ALLOGENEIC TRANSPLANT STAGES
-# ============================================================
 
 ALLO = [
-    {
-        "icon": "🩺",
-        "name": "Diagnosis",
-        "short": "Understand the treatment plan",
-        "color": "#E8F1FF",
-        "steps": [
-            ("🔎", "Understand diagnosis"),
-            ("💬", "Discuss options"),
-            ("📋", "Plan next steps"),
+    dict(
+        icon='🩺',
+        name='Diagnosis',
+        short='Understand the plan',
+        color='#e8f1ff',
+        steps=[
+            'Understand diagnosis',
+            'Discuss transplant options',
+            'Plan next steps'
         ],
-        "tests": [
-            "Diagnosis-specific tests",
-            "Treatment history",
+        tests=[
+            'Diagnosis-specific tests',
+            'Treatment history'
         ],
-        "questions": [
-            "Why is donor transplant considered?",
-            "What alternatives are available?",
+        ask=[
+            'Why a donor transplant?',
+            'What alternatives are available?'
         ],
-        "detail": (
-            "The team explains why a donor stem cell transplant "
-            "may be recommended and discusses benefits and risks."
-        ),
-        "terms": {
-            "Allogeneic": "A transplant using stem cells from a donor.",
-            "Remission": "A reduction or disappearance of signs of disease.",
-        },
-    },
-    {
-        "icon": "🫀",
-        "name": "Evaluation",
-        "short": "Check transplant readiness",
-        "color": "#FFF1E8",
-        "steps": [
-            ("📄", "Review health"),
-            ("🫀", "Assess organs"),
-            ("🤝", "Plan support"),
+        detail='The care team explains why donor stem cell transplantation may be considered.'
+    ),
+    dict(
+        icon='🫀',
+        name='Evaluation',
+        short='Check readiness',
+        color='#fff1e8',
+        steps=[
+            'Review health',
+            'Assess organs',
+            'Plan support'
         ],
-        "tests": [
-            "Blood counts",
-            "Infection screening",
-            "Heart and lung assessments",
+        tests=[
+            'Blood counts',
+            'Infection screening',
+            'Heart and lung assessments'
         ],
-        "questions": [
-            "Which tests are required?",
-            "What could affect the timeline?",
+        ask=[
+            'Which tests do I need?',
+            'What could change the timeline?'
         ],
-        "detail": (
-            "The transplant team evaluates disease status, "
-            "organ function, infection risk, and readiness."
-        ),
-        "terms": {
-            "CBC": "Complete blood count.",
-            "HLA": "Human leukocyte antigen, used in donor compatibility assessment.",
-        },
-    },
-    {
-        "icon": "🧬",
-        "name": "HLA Search",
-        "short": "Explore donor options",
-        "color": "#F0EDFF",
-        "steps": [
-            ("🧬", "HLA typing"),
-            ("🔎", "Search donors"),
-            ("🤝", "Review options"),
+        detail='The team assesses disease status, health, and practical readiness.'
+    ),
+    dict(
+        icon='🧬',
+        name='HLA Search',
+        short='Explore donor options',
+        color='#f0edff',
+        steps=[
+            'HLA typing',
+            'Review donor sources',
+            'Coordinate donor search'
         ],
-        "tests": [
-            "HLA typing",
-            "Donor compatibility assessment",
+        tests=[
+            'HLA typing',
+            'Donor compatibility review'
         ],
-        "questions": [
-            "Which donor options are available?",
-            "Who coordinates the donor search?",
+        ask=[
+            'Which donor options are available?',
+            'Who coordinates the search?'
         ],
-        "detail": (
-            "HLA typing helps the transplant team evaluate "
-            "potential related and unrelated donors."
-        ),
-        "terms": {
-            "HLA matching": "Comparison of tissue markers relevant to donor compatibility.",
-            "Donor registry": "A system supporting searches for potential stem cell donors.",
-        },
-    },
-    {
-        "icon": "🤝",
-        "name": "Donor Work-Up",
-        "short": "Prepare the donor",
-        "color": "#E8F7F2",
-        "steps": [
-            ("🧬", "Confirm match"),
-            ("🩺", "Screen donor"),
-            ("🩸", "Plan collection"),
+        detail='HLA tissue typing helps the team evaluate related and unrelated donor options.'
+    ),
+    dict(
+        icon='🤝',
+        name='Donor Work-Up',
+        short='Prepare the donor',
+        color='#e8f7f2',
+        steps=[
+            'Confirm donor match',
+            'Complete donor screening',
+            'Plan collection'
         ],
-        "tests": [
-            "Confirmatory HLA typing",
-            "Donor health screening",
+        tests=[
+            'Confirmatory typing',
+            'Donor health screening'
         ],
-        "questions": [
-            "How is the donor selected?",
-            "How will donor cells be collected?",
+        ask=[
+            'How is the donor selected?',
+            'How are cells collected?'
         ],
-        "detail": (
-            "The transplant center coordinates donor selection, "
-            "health screening, and collection arrangements."
-        ),
-        "terms": {
-            "Donor work-up": "Evaluation before stem cell donation.",
-            "Apheresis": "A blood-cell collection procedure.",
-        },
-    },
-    {
-        "icon": "💊",
-        "name": "Conditioning",
-        "short": "Prepare for donor cells",
-        "color": "#F3ECFF",
-        "steps": [
-            ("💊", "Start treatment"),
-            ("🛡️", "Manage effects"),
-            ("📅", "Prepare Day 0"),
+        detail='The transplant team confirms the donor plan and coordinates screening and collection.'
+    ),
+    dict(
+        icon='💊',
+        name='Conditioning',
+        short='Prepare for infusion',
+        color='#f3ecff',
+        steps=[
+            'Begin conditioning',
+            'Manage side effects',
+            'Prepare for Day 0'
         ],
-        "tests": [
-            "Blood counts",
-            "Organ function",
-            "Infection monitoring",
+        tests=[
+            'Blood counts',
+            'Organ function',
+            'Infection monitoring'
         ],
-        "questions": [
-            "What are the main risks?",
-            "How is GVHD prevented?",
+        ask=[
+            'What are the main risks?',
+            'How is GVHD prevented?'
         ],
-        "detail": (
-            "Chemotherapy, sometimes with radiation, "
-            "prepares the body to receive donor stem cells."
-        ),
-        "terms": {
-            "Conditioning": "Treatment before the stem cell infusion.",
-            "GVHD": "Graft-versus-host disease.",
-        },
-    },
-    {
-        "icon": "💧",
-        "name": "Day 0",
-        "short": "Receive donor stem cells",
-        "color": "#E8F7FF",
-        "steps": [
-            ("💧", "Cell infusion"),
-            ("🩺", "Monitor"),
-            ("🌱", "Watch engraftment"),
+        detail='Chemotherapy, sometimes with radiation, prepares the body for donor stem cells.'
+    ),
+    dict(
+        icon='💧',
+        name='Day 0',
+        short='Receive donor cells',
+        color='#e8f7ff',
+        steps=[
+            'Donor cell infusion',
+            'Monitor closely',
+            'Watch for engraftment'
         ],
-        "tests": [
-            "Blood counts",
-            "Vital signs",
-            "Engraftment monitoring",
+        tests=[
+            'Blood counts',
+            'Vital signs',
+            'Engraftment monitoring'
         ],
-        "questions": [
-            "What happens during infusion?",
-            "How will engraftment be assessed?",
+        ask=[
+            'What happens during infusion?',
+            'How will engraftment be assessed?'
         ],
-        "detail": (
-            "Donor stem cells are infused. The team monitors "
-            "engraftment and possible complications."
-        ),
-        "terms": {
-            "Day 0": "The day donor stem cells are infused.",
-            "Engraftment": "When transplanted cells begin producing new blood cells.",
-        },
-    },
-    {
-        "icon": "🏠",
-        "name": "Early Recovery",
-        "short": "Monitor GVHD and recovery",
-        "color": "#FFF5E4",
-        "steps": [
-            ("🛡️", "Prevent infections"),
-            ("🩺", "Monitor GVHD"),
-            ("📅", "Attend follow-ups"),
+        detail='Donor stem cells are infused. The team monitors recovery and possible complications.'
+    ),
+    dict(
+        icon='🏠',
+        name='Early Recovery',
+        short='Monitor GVHD and recovery',
+        color='#fff5e4',
+        steps=[
+            'Monitor infections',
+            'Watch for GVHD',
+            'Attend follow-ups'
         ],
-        "tests": [
-            "Blood counts",
-            "Chimerism testing",
-            "GVHD assessment",
+        tests=[
+            'Blood counts',
+            'Chimerism',
+            'GVHD assessment'
         ],
-        "questions": [
-            "Which symptoms require urgent contact?",
-            "How are medicines managed?",
+        ask=[
+            'What symptoms require a call?',
+            'How are medicines managed?'
         ],
-        "detail": (
-            "Close monitoring includes blood counts, infection risk, "
-            "GVHD, and donor-cell chimerism."
-        ),
-        "terms": {
-            "GVHD": "A condition where donor immune cells attack recipient tissues.",
-            "Chimerism": "A measure of donor-derived and recipient-derived blood cells.",
-        },
-    },
-    {
-        "icon": "🌱",
-        "name": "Long-Term Care",
-        "short": "Support immune recovery",
-        "color": "#E9F8ED",
-        "steps": [
-            ("🛡️", "Immune recovery"),
-            ("💉", "Review vaccines"),
-            ("🌱", "Long-term follow-up"),
+        detail='Close monitoring includes blood counts, infection risk, GVHD, and donor-cell chimerism.'
+    ),
+    dict(
+        icon='🌱',
+        name='Long-Term Care',
+        short='Support immune recovery',
+        color='#e9f8ed',
+        steps=[
+            'Monitor immune recovery',
+            'Review vaccines',
+            'Long-term follow-up'
         ],
-        "tests": [
-            "Disease surveillance",
-            "Chronic GVHD monitoring",
-            "Long-term health screening",
+        tests=[
+            'Disease surveillance',
+            'Chronic GVHD assessment',
+            'Long-term screening'
         ],
-        "questions": [
-            "What follow-up is needed?",
-            "When should vaccines be reviewed?",
+        ask=[
+            'What follow-up is needed?',
+            'When should vaccines be reviewed?'
         ],
-        "detail": (
-            "Long-term monitoring includes immune recovery, "
-            "GVHD, disease surveillance, and late effects."
-        ),
-        "terms": {
-            "Chronic GVHD": "GVHD that can affect multiple organs over time.",
-            "Immune recovery": "The gradual rebuilding of immune defenses after transplant.",
-        },
-    },
+        detail='Immune recovery and monitoring for GVHD and late effects can continue for a long time.'
+    ),
 ]
 
 
-# ============================================================
-# 3. CROSS-PLATFORM CSS
-# ============================================================
-
-JOURNEY_CSS = """
+CSS = """
 <style>
-
-/* Keep button contrast explicit across light/dark themes. */
-
+/* Journey-specific styles */
+.st-key-journey_stage_cards button,
 .st-key-journey_stage_cards button[kind="secondary"],
 .st-key-journey_stage_cards button[data-testid="stBaseButton-secondary"] {
-    background: #FFFFFF !important;
-    color: #18354A !important;
-    border: 1.5px solid #D9E8ED !important;
-    border-radius: 16px !important;
-    min-height: 116px !important;
+    background: #ffffff !important;
+    color: #18354a !important;
+    border: 1.5px solid #d9e8ed !important;
+    border-radius: 17px !important;
+    min-height: 112px !important;
     width: 100% !important;
     white-space: pre-line !important;
-    box-shadow: 0 6px 18px rgba(21,57,75,0.07) !important;
+    box-shadow: 0 6px 18px rgba(21,57,75,.06) !important;
+    transition: transform .12s ease, border-color .12s ease !important;
 }
 
 .st-key-journey_stage_cards button[kind="primary"],
 .st-key-journey_stage_cards button[data-testid="stBaseButton-primary"] {
-    background: #087E83 !important;
-    color: #FFFFFF !important;
-    border: 2px solid #087E83 !important;
-    border-radius: 16px !important;
-    min-height: 116px !important;
+    background: #087e83 !important;
+    color: #ffffff !important;
+    border: 2px solid #087e83 !important;
+    border-radius: 17px !important;
+    min-height: 112px !important;
     width: 100% !important;
     white-space: pre-line !important;
-    box-shadow: 0 8px 22px rgba(8,126,131,0.22) !important;
+    box-shadow: 0 8px 22px rgba(8,126,131,.22) !important;
 }
 
 .st-key-journey_stage_cards button p,
@@ -496,21 +357,21 @@ JOURNEY_CSS = """
     color: inherit !important;
     opacity: 1 !important;
     font-weight: 700 !important;
-    line-height: 1.45 !important;
+    line-height: 1.5 !important;
     text-align: center !important;
 }
 
 .st-key-journey_stage_cards button:hover {
     transform: translateY(-2px);
-    border-color: #079A98 !important;
+    border-color: #079a98 !important;
 }
 
 .jv-panel {
-    background: linear-gradient(125deg, #F2FAFB, #FFFFFF);
-    border: 1px solid #D8ECEC;
+    background: linear-gradient(125deg,#f2fafb,#ffffff);
+    border: 1px solid #d8ecec;
     border-radius: 22px;
     padding: 23px 25px;
-    margin: 14px 0 18px;
+    margin: 12px 0 18px;
 }
 
 .jv-hero {
@@ -532,53 +393,47 @@ JOURNEY_CSS = """
 }
 
 .jv-title {
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-size: clamp(1.5rem,3vw,2.25rem);
     font-weight: 800;
-    color: #163B4B;
+    color: #163b4b;
     line-height: 1.15;
 }
 
 .jv-subtitle {
     font-size: 1rem;
-    color: #52717B;
+    color: #52717b;
     margin-top: 8px;
 }
 
 .jv-eyebrow {
-    font-size: 0.76rem;
-    letter-spacing: 0.13em;
+    font-size: .76rem;
+    letter-spacing: .13em;
     font-weight: 800;
-    color: #087E83;
+    color: #087e83;
     margin-bottom: 9px;
 }
 
 .jv-step {
     border-radius: 14px;
-    background: #E8F6F5;
-    padding: 14px 9px;
-    color: #145B61;
+    background: #e8f6f5;
+    padding: 13px 9px;
+    color: #145b61;
     text-align: center;
     font-weight: 700;
-    min-height: 75px;
+    min-height: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.jv-step-icon {
-    font-size: 27px;
 }
 
 .jv-arrow {
     text-align: center;
-    color: #159C97;
+    color: #159c97;
     font-size: 1.5rem;
-    padding-top: 28px;
+    padding-top: 13px;
 }
 
-@media(max-width: 650px) {
+@media (max-width: 650px) {
     .jv-panel {
         padding: 17px;
     }
@@ -588,455 +443,250 @@ JOURNEY_CSS = """
         height: 70px;
         font-size: 35px;
     }
-
-    .jv-step {
-        padding: 10px 5px;
-        font-size: 12px;
-    }
 }
 
+@media (max-width: 767px) {
+    .st-key-journey_stage_cards [data-testid="stHorizontalBlock"] {
+        display: grid !important;
+        grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+        gap: 9px !important;
+    }
+
+    .st-key-journey_stage_cards
+    [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+        width: auto !important;
+        min-width: 0 !important;
+        flex: none !important;
+    }
+
+    .st-key-journey_stage_cards button {
+        min-height: 100px !important;
+        font-size: .83rem !important;
+    }
+}
 </style>
 """
 
 
-# ============================================================
-# 4. STAGE NAVIGATION CALLBACKS
-# ============================================================
-
-def select_journey_stage(state_key, stage_index):
-    """Select a stage before the next Streamlit render."""
-    st.session_state[state_key] = stage_index
+def _select_stage(state_key, index):
+    st.session_state[state_key] = index
 
 
-def move_journey_stage(state_key, direction, total_stages):
-    """Move to the previous or next stage safely."""
+def _move_stage(state_key, amount, count):
     current = st.session_state.get(state_key, 0)
+    st.session_state[state_key] = max(
+        0,
+        min(count - 1, current + amount)
+    )
 
-    new_stage = current + direction
+
+def render_journey(phases, is_allo):
+    """Interactive visual journey compatible with existing app.py."""
+
+    stages = ALLO if is_allo else AUTO
+    count = len(stages)
+
+    state_key = (
+        'journey_allo_select'
+        if is_allo
+        else 'journey_auto_select'
+    )
+
+    if (
+        state_key not in st.session_state
+        or not isinstance(st.session_state[state_key], int)
+    ):
+        st.session_state[state_key] = 0
 
     st.session_state[state_key] = max(
         0,
-        min(total_stages - 1, new_stage)
+        min(count - 1, st.session_state[state_key])
     )
 
+    st.markdown(CSS, unsafe_allow_html=True)
 
-# ============================================================
-# 5. VISUAL STAGE HEADER
-# ============================================================
-
-def render_stage_header(stage, selected, total, is_allo):
-
-    transplant_label = (
-        "DONOR TRANSPLANT"
-        if is_allo
-        else "OWN-CELL TRANSPLANT"
+    # Native stage selector
+    selected = st.selectbox(
+        'Jump to a stage',
+        list(range(count)),
+        format_func=lambda i: f'{i+1}. {stages[i]["name"]}',
+        key=state_key
     )
 
-    html = (
+    stage = stages[selected]
+
+    st.markdown('#### Explore the journey')
+
+    # This measures guide navigation, not medical recovery.
+    st.progress((selected + 1) / count)
+
+    st.caption(
+        f'Viewing stage {selected+1} of {count} · '
+        'This is guide navigation, not medical progress.'
+    )
+
+    # Clickable stage cards
+    st.markdown('#### Select any stage')
+
+    with st.container(key='journey_stage_cards'):
+
+        for start in range(0, count, 4):
+
+            cols = st.columns(4, gap='small')
+
+            for offset, col in enumerate(cols):
+
+                idx = start + offset
+
+                if idx >= count:
+                    continue
+
+                item = stages[idx]
+
+                with col:
+
+                    st.button(
+                        f'{item["icon"]}\n'
+                        f'Stage {idx+1}\n'
+                        f'{item["name"]}',
+                        key=f'{state_key}_card_{idx}',
+                        use_container_width=True,
+                        type=(
+                            'primary'
+                            if idx == selected
+                            else 'secondary'
+                        ),
+                        on_click=_select_stage,
+                        args=(state_key, idx)
+                    )
+
+    # Visual stage hero
+    st.markdown(
         '<div class="jv-panel">'
         '<div class="jv-eyebrow">'
-        f'STAGE {selected + 1} OF {total} · {transplant_label}'
+        f'STAGE {selected+1} OF {count} · '
+        f'{"DONOR" if is_allo else "OWN-CELL"} TRANSPLANT'
         '</div>'
         '<div class="jv-hero">'
-        f'<div class="jv-icon" style="background:{stage["color"]}">'
+        f'<div class="jv-icon" '
+        f'style="background:{stage["color"]}">'
         f'{stage["icon"]}'
         '</div>'
         '<div>'
-        f'<div class="jv-title">{escape(stage["name"])}</div>'
-        f'<div class="jv-subtitle">{escape(stage["short"])}</div>'
+        f'<div class="jv-title">'
+        f'{escape(stage["name"])}'
+        '</div>'
+        f'<div class="jv-subtitle">'
+        f'{escape(stage["short"])}'
         '</div>'
         '</div>'
         '</div>'
-    )
-
-    st.markdown(
-        html,
+        '</div>',
         unsafe_allow_html=True
     )
 
+    # Three-step process
+    st.markdown('#### What happens at this stage?')
 
-# ============================================================
-# 6. THREE-STEP VISUAL PROCESS
-# ============================================================
-
-def render_visual_steps(stage):
-
-    st.markdown("#### What Happens at This Stage?")
-
-    columns = st.columns(
+    step_cols = st.columns(
         [4, 1, 4, 1, 4],
-        gap="small"
+        gap='small'
     )
 
-    for index, (icon, label) in enumerate(stage["steps"]):
+    for idx, text in enumerate(stage['steps']):
 
-        with columns[index * 2]:
-
-            html = (
-                '<div class="jv-step">'
-                f'<div class="jv-step-icon">{icon}</div>'
-                f'<div>{escape(label)}</div>'
-                '</div>'
-            )
+        with step_cols[idx * 2]:
 
             st.markdown(
-                html,
+                f'<div class="jv-step">'
+                f'{escape(text)}'
+                '</div>',
                 unsafe_allow_html=True
             )
 
-        if index < 2:
+        if idx < 2:
 
-            with columns[index * 2 + 1]:
+            with step_cols[idx * 2 + 1]:
 
                 st.markdown(
                     '<div class="jv-arrow">→</div>',
                     unsafe_allow_html=True
                 )
 
+    st.caption(stage['detail'])
 
-# ============================================================
-# 7. COMPACT INFORMATION PANELS
-# ============================================================
-
-def render_information_panels(stage):
-
-    left, right = st.columns(
-        2,
-        gap="medium"
-    )
+    # Compact information panels
+    left, right = st.columns(2, gap='medium')
 
     with left:
 
         with st.container(border=True):
 
-            st.markdown("**🔬 Common Checks**")
+            st.markdown('**🔬 Common checks**')
 
-            for item in stage["tests"]:
-                st.markdown(f"- {item}")
+            for test in stage['tests']:
+                st.markdown(f'• {test}')
 
     with right:
 
         with st.container(border=True):
 
-            st.markdown("**💬 Ask Your Care Team**")
+            st.markdown('**💬 Ask your care team**')
 
-            for question in stage["questions"]:
-                st.markdown(f"- {question}")
+            for question in stage['ask']:
+                st.markdown(f'• {question}')
 
+    # Expandable details
+    with st.expander('📖 More detail and medical terms'):
 
-# ============================================================
-# 8. EXPANDABLE MEDICAL INFORMATION
-# ============================================================
-
-def render_more_information(stage, phases, selected):
-
-    with st.expander(
-        "📖 More Details & Medical Terms",
-        expanded=False
-    ):
-
-        st.markdown("#### Stage Overview")
-
-        st.write(stage["detail"])
+        st.write(stage['detail'])
 
         if phases and selected < len(phases):
+            st.write(phases[selected][1])
 
-            phase = phases[selected]
-
-            if len(phase) > 1:
-                st.write(phase[1])
-
-        st.markdown("#### Medical Terms")
-
-        for term, explanation in stage["terms"].items():
-
-            st.markdown(
-                f"**{term}:** {explanation}"
+        if is_allo and selected >= 5:
+            st.write(
+                '**GVHD:** Graft-versus-host disease occurs '
+                'when donor immune cells attack the '
+                'recipient’s tissues. The transplant team '
+                'manages prevention and monitoring.'
             )
 
-        st.info(
-            "These explanations are educational. "
-            "Your transplant team determines the "
-            "appropriate tests and treatment plan."
-        )
-
-
-# ============================================================
-# 9. MAIN RENDER FUNCTION
-# ============================================================
-
-def render_journey(phases, is_allo):
-    """
-    Render the complete interactive transplant journey.
-
-    Parameters
-    ----------
-    phases:
-        Existing journey phase tuples from app.py.
-
-    is_allo:
-        True for allogeneic transplant.
-        False for autologous transplant.
-    """
-
-    stages = ALLO if is_allo else AUTO
-
-    total_stages = len(stages)
-
-    state_key = (
-        "journey_allo_select"
-        if is_allo
-        else "journey_auto_select"
-    )
-
-    # Initialize state before creating the selectbox.
-    if state_key not in st.session_state:
-        st.session_state[state_key] = 0
-
-    current = st.session_state[state_key]
-
-    if not isinstance(current, int):
-        current = 0
-
-    st.session_state[state_key] = max(
-        0,
-        min(total_stages - 1, current)
-    )
-
-    # Apply journey-specific styling.
-    st.markdown(
-        JOURNEY_CSS,
-        unsafe_allow_html=True
-    )
-
-    # --------------------------------------------------------
-    # STAGE SELECTOR
-    # --------------------------------------------------------
-
-    selected = st.selectbox(
-        "Jump to a Stage",
-        options=list(range(total_stages)),
-        format_func=lambda i: (
-            f"Stage {i + 1}: {stages[i]['name']}"
-        ),
-        key=state_key
-    )
-
-    stage = stages[selected]
-
-    # --------------------------------------------------------
-    # PROGRESS
-    # --------------------------------------------------------
-
-    st.markdown("#### Journey Guide Position")
-
-    st.progress(
-        (selected + 1) / total_stages
-    )
-
-    st.caption(
-        f"Viewing Stage {selected + 1} of {total_stages}. "
-        "This shows navigation through the guide, "
-        "not medical treatment progress."
-    )
-
-    # --------------------------------------------------------
-    # CLICKABLE STAGE CARDS
-    # --------------------------------------------------------
-
-    st.markdown("#### Click a Stage to View Details")
-
-    with st.container(
-        key="journey_stage_cards"
-    ):
-
-        cards_per_row = 4
-
-        for start in range(
-            0,
-            total_stages,
-            cards_per_row
-        ):
-
-            columns = st.columns(
-                cards_per_row,
-                gap="small"
+        if selected >= (5 if is_allo else 4):
+            st.write(
+                '**Engraftment:** Transplanted cells begin '
+                'producing new blood cells. Engraftment '
+                'is not the same as cancer remission.'
             )
 
-            for offset, col in enumerate(columns):
+    # Navigation
+    previous, next_col = st.columns(2)
 
-                stage_index = start + offset
-
-                if stage_index >= total_stages:
-                    continue
-
-                item = stages[stage_index]
-
-                with col:
-
-                    is_selected = (
-                        stage_index == selected
-                    )
-
-                    label = (
-                        f'{item["icon"]}\n'
-                        f'Stage {stage_index + 1}\n'
-                        f'{item["name"]}'
-                    )
-
-                    st.button(
-                        label,
-                        key=(
-                            f"{state_key}_card_"
-                            f"{stage_index}"
-                        ),
-                        use_container_width=True,
-                        type=(
-                            "primary"
-                            if is_selected
-                            else "secondary"
-                        ),
-                        on_click=select_journey_stage,
-                        args=(
-                            state_key,
-                            stage_index
-                        )
-                    )
-
-    st.caption(
-        "Select any stage above to explore its details."
-    )
-
-    st.divider()
-
-    # --------------------------------------------------------
-    # VISUAL STAGE HEADER
-    # --------------------------------------------------------
-
-    render_stage_header(
-        stage,
-        selected,
-        total_stages,
-        is_allo
-    )
-
-    # --------------------------------------------------------
-    # VISUAL PROCESS
-    # --------------------------------------------------------
-
-    render_visual_steps(stage)
-
-    # --------------------------------------------------------
-    # SHORT DESCRIPTION
-    # --------------------------------------------------------
-
-    st.caption(
-        stage["detail"]
-    )
-
-    # --------------------------------------------------------
-    # INFORMATION PANELS
-    # --------------------------------------------------------
-
-    render_information_panels(stage)
-
-    # --------------------------------------------------------
-    # EXPANDABLE DETAILS
-    # --------------------------------------------------------
-
-    render_more_information(
-        stage,
-        phases,
-        selected
-    )
-
-    st.divider()
-
-    # --------------------------------------------------------
-    # PREVIOUS / NEXT BUTTONS
-    # --------------------------------------------------------
-
-    previous_col, next_col = st.columns(2)
-
-    with previous_col:
+    with previous:
 
         st.button(
-            "← Previous Stage",
-            key=f"{state_key}_previous",
-            disabled=(selected == 0),
+            '← Previous stage',
+            key=f'{state_key}_prev',
+            disabled=selected == 0,
             use_container_width=True,
-            on_click=move_journey_stage,
-            args=(
-                state_key,
-                -1,
-                total_stages
-            )
+            on_click=_move_stage,
+            args=(state_key, -1, count)
         )
 
     with next_col:
 
         st.button(
-            "Next Stage →",
-            key=f"{state_key}_next",
-            disabled=(
-                selected == total_stages - 1
-            ),
+            'Next stage →',
+            key=f'{state_key}_next',
+            disabled=selected == count - 1,
             use_container_width=True,
-            type="primary",
-            on_click=move_journey_stage,
-            args=(
-                state_key,
-                1,
-                total_stages
-            )
+            type='primary',
+            on_click=_move_stage,
+            args=(state_key, 1, count)
         )
 
     st.caption(
-        "StemBridge is an educational guide. "
-        "The sequence, tests, and timing may differ "
-        "for individual patients. Follow your "
-        "transplant team's instructions."
-    )
-
-
-# ============================================================
-# 10. STANDALONE TEST
-# ============================================================
-
-if __name__ == "__main__":
-
-    st.set_page_config(
-        page_title="StemBridge Journey",
-        page_icon="🧬",
-        layout="wide"
-    )
-
-    st.title("🧬 StemBridge Transplant Journey")
-
-    transplant_type = st.radio(
-        "Select Transplant Type",
-        [
-            "Autologous",
-            "Allogeneic"
-        ],
-        horizontal=True
-    )
-
-    is_allo = (
-        transplant_type == "Allogeneic"
-    )
-
-    stages = ALLO if is_allo else AUTO
-
-    example_phases = [
-        (
-            stage["name"],
-            stage["detail"]
-        )
-        for stage in stages
-    ]
-
-    render_journey(
-        example_phases,
-        is_allo
+        'Educational overview only. Stage order and '
+        'tests vary by patient and center; follow '
+        'your transplant team’s guidance.'
     )
