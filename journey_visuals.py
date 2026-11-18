@@ -1,21 +1,24 @@
 
 """
-StemBridge - Interactive Visual Transplant Journey
+StemBridge - Visual Transplant Journey
+=====================================
 
 Features:
-- Autologous transplant: 7 stages
-- Allogeneic transplant: 8 stages
+- Autologous and allogeneic transplant journeys
 - Clickable stage cards
-- Previous / Next navigation
-- Dropdown selection
-- Automatic progress percentage
-- Visual illustrations
-- Detailed educational information
-- Tests, questions, and medical terms
+- Cross-platform light/dark theme contrast
+- Visual three-step process
+- Short stage explanations
+- Common checks and questions
+- Expandable detailed education
+- Previous / Next stage navigation
+- Accessible native Streamlit controls
 
-This is an educational prototype.
-Progress represents navigation through the guide,
-not actual medical treatment or recovery.
+Integration:
+    from journey_visuals import render_journey
+    render_journey(phases, is_allo)
+
+Educational prototype only.
 """
 
 from html import escape
@@ -30,237 +33,198 @@ AUTO = [
     {
         "icon": "🩺",
         "name": "Diagnosis",
-        "heading": "Understanding the Diagnosis",
-        "description": """
-The transplant journey begins with understanding the
-patient's diagnosis and available treatment options.
-
-The medical team explains why a stem cell transplant
-may be recommended and discusses possible alternatives.
-
-Not every patient with blood cancer needs a transplant.
-""",
-        "tests": """
-- Medical history review
-- Complete blood count (CBC)
-- Bone marrow examination when appropriate
-- Disease-specific testing
-- Review of previous treatments
-""",
-        "questions": """
-- Why is a transplant recommended?
-- What other treatments are available?
-- What are the possible benefits and risks?
-- What should my family know?
-""",
-        "terms": """
-**Stem cell transplant:** A treatment that provides
-blood-forming stem cells to restore blood-cell production.
-"""
+        "short": "Understand the treatment plan",
+        "color": "#E8F1FF",
+        "steps": [
+            ("🔎", "Understand diagnosis"),
+            ("💬", "Discuss treatment"),
+            ("📋", "Plan next steps"),
+        ],
+        "tests": [
+            "Diagnosis-specific tests",
+            "Treatment history review",
+        ],
+        "questions": [
+            "Why is transplant being considered?",
+            "What alternatives are available?",
+        ],
+        "detail": (
+            "Your team explains the diagnosis, treatment goals, "
+            "and why an autologous transplant may be considered."
+        ),
+        "terms": {
+            "Autologous": "Using the patient's own stem cells.",
+            "Remission": "A reduction or disappearance of signs of disease.",
+        },
     },
     {
         "icon": "🫀",
         "name": "Evaluation",
-        "heading": "Checking Transplant Readiness",
-        "description": """
-Before transplantation, doctors evaluate whether the
-patient is ready for the procedure.
-
-The team reviews overall health, disease status,
-organ function, and support needs.
-
-The exact tests vary by patient and transplant center.
-""",
-        "tests": """
-- Complete blood count
-- Kidney and liver function tests
-- Heart evaluation
-- Lung function testing
-- Infection screening
-- Disease assessment
-""",
-        "questions": """
-- Am I ready for transplantation?
-- What do my test results mean?
-- What risks apply to my health?
-- Will I need to stay near the hospital?
-""",
-        "terms": """
-**CBC:** Complete blood count.
-
-This test measures red blood cells, white blood cells,
-and platelets.
-"""
+        "short": "Check transplant readiness",
+        "color": "#FFF1E8",
+        "steps": [
+            ("📄", "Review health"),
+            ("🫀", "Check organs"),
+            ("🤝", "Plan support"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Heart and lung assessments",
+            "Infection screening",
+        ],
+        "questions": [
+            "Which tests will I need?",
+            "What could change the transplant plan?",
+        ],
+        "detail": (
+            "The transplant team assesses disease status, "
+            "organ function, infections, and practical readiness."
+        ),
+        "terms": {
+            "CBC": "Complete blood count.",
+            "Conditioning": "Treatment used to prepare for transplant.",
+        },
     },
     {
         "icon": "🩸",
         "name": "Stem Cell Collection",
-        "heading": "Collecting the Patient's Stem Cells",
-        "description": """
-In an autologous transplant, the patient's own
-stem cells are collected.
-
-Medicines may be used to move stem cells from
-bone marrow into the bloodstream.
-
-The cells are commonly collected using a process
-called apheresis and stored until transplantation.
-""",
-        "tests": """
-- Blood count monitoring
-- Mobilization medicines
-- Peripheral blood stem cell collection
-- Assessment of collected cell quantity
-- Cell processing and storage
-""",
-        "questions": """
-- How will stem cells be collected?
-- Will collection be painful?
-- How long will collection take?
-- Could I need more than one collection session?
-""",
-        "terms": """
-**Apheresis:** A process that collects selected
-blood components and returns the remaining
-components to the patient.
-"""
+        "short": "Collect and store stem cells",
+        "color": "#FFF0F0",
+        "steps": [
+            ("💉", "Mobilize cells"),
+            ("🩸", "Collect cells"),
+            ("❄️", "Store cells"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Stem cell collection yield",
+        ],
+        "questions": [
+            "How long will collection take?",
+            "Will I need a central line?",
+        ],
+        "detail": (
+            "Medicines may move stem cells into the bloodstream. "
+            "The cells are collected through apheresis and stored "
+            "for later infusion."
+        ),
+        "terms": {
+            "Mobilization": "Moving stem cells into the bloodstream.",
+            "Apheresis": "A procedure that separates and collects cells from blood.",
+        },
     },
     {
         "icon": "💊",
         "name": "Conditioning",
-        "heading": "Preparing for Transplantation",
-        "description": """
-Conditioning is treatment given before stem cell infusion.
-
-In autologous transplantation, high-dose chemotherapy
-is commonly used to treat the underlying disease.
-
-The medical team also provides supportive care
-and monitors treatment-related side effects.
-""",
-        "tests": """
-- Blood count monitoring
-- Kidney and liver tests
-- Infection monitoring
-- Side-effect assessment
-- Hydration and nutritional support
-""",
-        "questions": """
-- What chemotherapy will I receive?
-- What side effects should I expect?
-- Will I need hospitalization?
-- What symptoms should I report immediately?
-""",
-        "terms": """
-**Conditioning:** Treatment given before
-stem cell infusion.
-"""
+        "short": "Prepare the body for infusion",
+        "color": "#F3ECFF",
+        "steps": [
+            ("💊", "Start treatment"),
+            ("🛡️", "Manage effects"),
+            ("📅", "Prepare for Day 0"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Organ function",
+            "Infection monitoring",
+        ],
+        "questions": [
+            "What side effects should I expect?",
+            "Will I stay in the hospital?",
+        ],
+        "detail": (
+            "High-dose treatment prepares the body before "
+            "the collected stem cells are returned."
+        ),
+        "terms": {
+            "Conditioning": "Chemotherapy, sometimes with radiation, before transplant.",
+            "Supportive care": "Care that helps manage symptoms and complications.",
+        },
     },
     {
         "icon": "💧",
         "name": "Day 0",
-        "heading": "Stem Cell Infusion and Engraftment",
-        "description": """
-Day 0 is the day the collected stem cells
-are returned to the patient.
-
-The cells are infused through a vein,
-usually using an intravenous or central line.
-
-After infusion, the transplant team monitors
-the patient while waiting for new blood-cell
-production to begin.
-
-Engraftment occurs when transplanted cells
-begin producing new blood cells.
-""",
-        "tests": """
-- Absolute neutrophil count (ANC)
-- Hemoglobin
-- Platelet count
-- Temperature and infection monitoring
-- Infusion-related reactions
-""",
-        "questions": """
-- How is the infusion performed?
-- What is engraftment?
-- How will doctors know the cells are working?
-- Will blood transfusions be needed?
-""",
-        "terms": """
-**Engraftment:** The process in which transplanted
-stem cells begin producing new blood cells.
-
-Engraftment does not automatically mean cancer remission.
-"""
+        "short": "Receive your stem cells",
+        "color": "#E8F7FF",
+        "steps": [
+            ("💧", "Cell infusion"),
+            ("🩺", "Monitor"),
+            ("🌱", "Watch engraftment"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Vital signs",
+            "Engraftment monitoring",
+        ],
+        "questions": [
+            "How does the infusion work?",
+            "When might engraftment occur?",
+        ],
+        "detail": (
+            "Stored stem cells are infused through a vein. "
+            "The transplant team monitors blood-cell recovery "
+            "and possible complications."
+        ),
+        "terms": {
+            "Day 0": "The day stem cells are infused.",
+            "Engraftment": "When transplanted cells begin producing new blood cells.",
+        },
     },
     {
         "icon": "🏠",
         "name": "Early Recovery",
-        "heading": "Monitoring After Transplantation",
-        "description": """
-After transplantation, patients need
-close medical follow-up.
-
-The team monitors blood-cell recovery,
-infections, treatment side effects,
-and the underlying disease.
-
-The first 100 days are often an important
-follow-up period, but recovery can take longer.
-""",
-        "tests": """
-- Complete blood counts
-- Infection monitoring
-- Kidney and liver tests
-- Disease-specific monitoring
-- Medication review
-""",
-        "questions": """
-- How frequently are follow-up visits needed?
-- Which symptoms require urgent medical attention?
-- What precautions should I follow at home?
-- When can I resume normal activities?
-""",
-        "terms": """
-**Early recovery:** The period after transplant
-when blood counts, symptoms, and complications
-are monitored closely.
-"""
+        "short": "Monitor and recover",
+        "color": "#FFF5E4",
+        "steps": [
+            ("🧪", "Check counts"),
+            ("📅", "Attend follow-ups"),
+            ("🏠", "Follow precautions"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Infection checks",
+            "Disease response monitoring",
+        ],
+        "questions": [
+            "When should I contact my team?",
+            "What precautions apply at home?",
+        ],
+        "detail": (
+            "During early recovery, the team monitors blood counts, "
+            "infections, symptoms, and treatment response."
+        ),
+        "terms": {
+            "ANC": "Absolute neutrophil count, a measure of infection-fighting cells.",
+            "Platelets": "Blood components that help with clotting.",
+        },
     },
     {
         "icon": "🌱",
         "name": "Long-Term Care",
-        "heading": "Recovery and Survivorship",
-        "description": """
-Long-term follow-up helps monitor health
-after transplantation.
-
-Care may include monitoring for disease recurrence,
-late effects of treatment, infections,
-and physical or emotional challenges.
-
-Vaccination and wellness plans are determined
-by the transplant team.
-""",
-        "tests": """
-- Disease surveillance
-- Blood counts
-- Organ health monitoring
-- Vaccination planning
-- Long-term treatment-effect screening
-""",
-        "questions": """
-- How often should I see my transplant team?
-- Which vaccinations will I need?
-- What long-term complications should I know about?
-- When can I return to work or school?
-""",
-        "terms": """
-**Survivorship:** Long-term health and support
-following cancer treatment.
-"""
-    }
+        "short": "Support long-term wellness",
+        "color": "#E9F8ED",
+        "steps": [
+            ("📅", "Follow-up"),
+            ("💉", "Review vaccines"),
+            ("🌱", "Monitor wellness"),
+        ],
+        "tests": [
+            "Disease surveillance",
+            "Long-term health screening",
+        ],
+        "questions": [
+            "What is my follow-up schedule?",
+            "When should vaccines be reviewed?",
+        ],
+        "detail": (
+            "Long-term care may include disease monitoring, "
+            "vaccination planning, and screening for late effects."
+        ),
+        "terms": {
+            "Survivorship": "Long-term health and well-being after treatment.",
+            "Late effects": "Health problems that may appear months or years later.",
+        },
+    },
 ]
 
 
@@ -272,320 +236,380 @@ ALLO = [
     {
         "icon": "🩺",
         "name": "Diagnosis",
-        "heading": "Understanding Donor Transplantation",
-        "description": """
-The medical team explains the diagnosis
-and why an allogeneic stem cell transplant
-may be recommended.
-
-In an allogeneic transplant, stem cells
-come from a donor rather than the patient.
-
-The team discusses potential benefits,
-risks, and other treatment options.
-""",
-        "tests": """
-- Medical history
-- Blood tests
-- Disease assessment
-- Review of previous treatments
-""",
-        "questions": """
-- Why is donor transplantation recommended?
-- What are the alternatives?
-- What are the major risks?
-- How can my family prepare?
-""",
-        "terms": """
-**Allogeneic transplant:** A transplant using
-blood-forming stem cells from a donor.
-"""
+        "short": "Understand the treatment plan",
+        "color": "#E8F1FF",
+        "steps": [
+            ("🔎", "Understand diagnosis"),
+            ("💬", "Discuss options"),
+            ("📋", "Plan next steps"),
+        ],
+        "tests": [
+            "Diagnosis-specific tests",
+            "Treatment history",
+        ],
+        "questions": [
+            "Why is donor transplant considered?",
+            "What alternatives are available?",
+        ],
+        "detail": (
+            "The team explains why a donor stem cell transplant "
+            "may be recommended and discusses benefits and risks."
+        ),
+        "terms": {
+            "Allogeneic": "A transplant using stem cells from a donor.",
+            "Remission": "A reduction or disappearance of signs of disease.",
+        },
     },
     {
         "icon": "🫀",
         "name": "Evaluation",
-        "heading": "Checking Transplant Readiness",
-        "description": """
-Before transplantation, the team evaluates
-the patient's health and disease status.
-
-Doctors review organ function, infections,
-previous treatment, and practical support needs.
-
-This helps the team assess transplant suitability.
-""",
-        "tests": """
-- Complete blood count
-- Kidney and liver tests
-- Heart and lung evaluation
-- Infection screening
-- Disease-specific testing
-""",
-        "questions": """
-- Am I medically ready for transplantation?
-- What tests are needed?
-- What risks are most important for me?
-- What support will I need?
-""",
-        "terms": """
-**Transplant evaluation:** Medical assessments
-used to help determine readiness for transplantation.
-"""
+        "short": "Check transplant readiness",
+        "color": "#FFF1E8",
+        "steps": [
+            ("📄", "Review health"),
+            ("🫀", "Assess organs"),
+            ("🤝", "Plan support"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Infection screening",
+            "Heart and lung assessments",
+        ],
+        "questions": [
+            "Which tests are required?",
+            "What could affect the timeline?",
+        ],
+        "detail": (
+            "The transplant team evaluates disease status, "
+            "organ function, infection risk, and readiness."
+        ),
+        "terms": {
+            "CBC": "Complete blood count.",
+            "HLA": "Human leukocyte antigen, used in donor compatibility assessment.",
+        },
     },
     {
         "icon": "🧬",
         "name": "HLA Search",
-        "heading": "Finding Possible Donors",
-        "description": """
-HLA typing helps the transplant team
-identify possible donor options.
-
-Potential sources may include family donors,
-unrelated donors, and other stem cell sources.
-
-Donor searches are managed by transplant centers
-and authorized registry systems.
-
-StemBridge does not search donor registries
-or identify donor matches.
-""",
-        "tests": """
-- HLA tissue typing
-- Family donor testing when appropriate
-- Registry-based donor search
-- Donor compatibility evaluation
-""",
-        "questions": """
-- What does HLA matching mean?
-- Can a family member be a donor?
-- What happens if no closely matched donor is found?
-- How long might the donor search take?
-""",
-        "terms": """
-**HLA:** Human leukocyte antigen.
-
-HLA markers help the medical team
-assess donor-recipient compatibility.
-"""
+        "short": "Explore donor options",
+        "color": "#F0EDFF",
+        "steps": [
+            ("🧬", "HLA typing"),
+            ("🔎", "Search donors"),
+            ("🤝", "Review options"),
+        ],
+        "tests": [
+            "HLA typing",
+            "Donor compatibility assessment",
+        ],
+        "questions": [
+            "Which donor options are available?",
+            "Who coordinates the donor search?",
+        ],
+        "detail": (
+            "HLA typing helps the transplant team evaluate "
+            "potential related and unrelated donors."
+        ),
+        "terms": {
+            "HLA matching": "Comparison of tissue markers relevant to donor compatibility.",
+            "Donor registry": "A system supporting searches for potential stem cell donors.",
+        },
     },
     {
         "icon": "🤝",
         "name": "Donor Work-Up",
-        "heading": "Confirming Donor Suitability",
-        "description": """
-After identifying possible donor options,
-the transplant center performs additional checks.
-
-These may include confirmatory HLA typing,
-donor health screening, and collection planning.
-
-The team selects the donor and collection approach
-based on medical and logistical considerations.
-""",
-        "tests": """
-- Confirmatory HLA testing
-- Donor health assessment
-- Infectious disease screening
-- Stem cell collection planning
-""",
-        "questions": """
-- How is the final donor selected?
-- What medical checks are performed?
-- How will donor cells be collected?
-- What happens if the selected donor becomes unavailable?
-""",
-        "terms": """
-**Donor work-up:** Medical and logistical
-assessments completed before donor cell collection.
-"""
+        "short": "Prepare the donor",
+        "color": "#E8F7F2",
+        "steps": [
+            ("🧬", "Confirm match"),
+            ("🩺", "Screen donor"),
+            ("🩸", "Plan collection"),
+        ],
+        "tests": [
+            "Confirmatory HLA typing",
+            "Donor health screening",
+        ],
+        "questions": [
+            "How is the donor selected?",
+            "How will donor cells be collected?",
+        ],
+        "detail": (
+            "The transplant center coordinates donor selection, "
+            "health screening, and collection arrangements."
+        ),
+        "terms": {
+            "Donor work-up": "Evaluation before stem cell donation.",
+            "Apheresis": "A blood-cell collection procedure.",
+        },
     },
     {
         "icon": "💊",
         "name": "Conditioning",
-        "heading": "Preparing for Donor Stem Cells",
-        "description": """
-Conditioning prepares the patient
-for donor stem cell transplantation.
-
-Treatment may involve chemotherapy
-and sometimes radiation.
-
-The medical team also plans medicines
-to reduce infection risks and help prevent
-graft-versus-host disease (GVHD).
-""",
-        "tests": """
-- Blood counts
-- Kidney and liver monitoring
-- Infection surveillance
-- Side-effect assessment
-- GVHD prevention planning
-""",
-        "questions": """
-- What conditioning treatment will I receive?
-- What side effects are possible?
-- How will GVHD be prevented?
-- How long might hospitalization last?
-""",
-        "terms": """
-**GVHD:** Graft-versus-host disease.
-
-It can occur when donor immune cells
-react against the recipient's tissues.
-"""
+        "short": "Prepare for donor cells",
+        "color": "#F3ECFF",
+        "steps": [
+            ("💊", "Start treatment"),
+            ("🛡️", "Manage effects"),
+            ("📅", "Prepare Day 0"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Organ function",
+            "Infection monitoring",
+        ],
+        "questions": [
+            "What are the main risks?",
+            "How is GVHD prevented?",
+        ],
+        "detail": (
+            "Chemotherapy, sometimes with radiation, "
+            "prepares the body to receive donor stem cells."
+        ),
+        "terms": {
+            "Conditioning": "Treatment before the stem cell infusion.",
+            "GVHD": "Graft-versus-host disease.",
+        },
     },
     {
         "icon": "💧",
         "name": "Day 0",
-        "heading": "Donor Stem Cell Infusion",
-        "description": """
-Day 0 is the day donor stem cells
-are infused into the patient.
-
-The cells travel through the bloodstream
-and may establish blood-cell production
-in the bone marrow.
-
-The transplant team closely monitors
-blood counts, infection risks, and complications.
-""",
-        "tests": """
-- Absolute neutrophil count (ANC)
-- Hemoglobin
-- Platelet count
-- Temperature monitoring
-- Infusion reactions
-- Engraftment assessment
-""",
-        "questions": """
-- How will the infusion work?
-- How will engraftment be monitored?
-- What complications should I know about?
-- Which medicines will I receive?
-""",
-        "terms": """
-**Engraftment:** When transplanted stem cells
-begin producing new blood cells.
-"""
+        "short": "Receive donor stem cells",
+        "color": "#E8F7FF",
+        "steps": [
+            ("💧", "Cell infusion"),
+            ("🩺", "Monitor"),
+            ("🌱", "Watch engraftment"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Vital signs",
+            "Engraftment monitoring",
+        ],
+        "questions": [
+            "What happens during infusion?",
+            "How will engraftment be assessed?",
+        ],
+        "detail": (
+            "Donor stem cells are infused. The team monitors "
+            "engraftment and possible complications."
+        ),
+        "terms": {
+            "Day 0": "The day donor stem cells are infused.",
+            "Engraftment": "When transplanted cells begin producing new blood cells.",
+        },
     },
     {
-        "icon": "🛡️",
+        "icon": "🏠",
         "name": "Early Recovery",
-        "heading": "Monitoring Infection and GVHD",
-        "description": """
-During early recovery, the team
-monitors blood counts, infections,
-GVHD symptoms, and medication effects.
-
-Some patients undergo chimerism testing
-to assess the proportion of donor-derived
-blood cells.
-
-Recovery and follow-up requirements vary.
-""",
-        "tests": """
-- Complete blood count
-- Infection monitoring
-- GVHD assessment
-- Kidney and liver tests
-- Chimerism testing when indicated
-- Immunosuppressive medication monitoring
-""",
-        "questions": """
-- What symptoms could indicate GVHD?
-- What is chimerism testing?
-- How frequently are follow-up visits needed?
-- What precautions should I follow at home?
-""",
-        "terms": """
-**Chimerism:** A measurement of the proportion
-of donor-derived blood cells after transplantation.
-"""
+        "short": "Monitor GVHD and recovery",
+        "color": "#FFF5E4",
+        "steps": [
+            ("🛡️", "Prevent infections"),
+            ("🩺", "Monitor GVHD"),
+            ("📅", "Attend follow-ups"),
+        ],
+        "tests": [
+            "Blood counts",
+            "Chimerism testing",
+            "GVHD assessment",
+        ],
+        "questions": [
+            "Which symptoms require urgent contact?",
+            "How are medicines managed?",
+        ],
+        "detail": (
+            "Close monitoring includes blood counts, infection risk, "
+            "GVHD, and donor-cell chimerism."
+        ),
+        "terms": {
+            "GVHD": "A condition where donor immune cells attack recipient tissues.",
+            "Chimerism": "A measure of donor-derived and recipient-derived blood cells.",
+        },
     },
     {
         "icon": "🌱",
         "name": "Long-Term Care",
-        "heading": "Immune Recovery and Survivorship",
-        "description": """
-Long-term care focuses on immune recovery,
-disease monitoring, and overall health.
-
-Some patients require ongoing monitoring
-or treatment for chronic GVHD.
-
-The transplant team may also recommend
-vaccination, late-effects screening,
-and rehabilitation support.
-""",
-        "tests": """
-- Immune function monitoring
-- Disease surveillance
-- Chronic GVHD assessment
-- Organ health monitoring
-- Vaccination planning
-- Long-term complication screening
-""",
-        "questions": """
-- How long will immune recovery take?
-- What are the signs of chronic GVHD?
-- Which vaccinations are recommended?
-- How frequently should I attend follow-up visits?
-""",
-        "terms": """
-**Chronic GVHD:** A form of graft-versus-host
-disease that can affect patients during
-longer-term recovery after allogeneic transplant.
-"""
-    }
+        "short": "Support immune recovery",
+        "color": "#E9F8ED",
+        "steps": [
+            ("🛡️", "Immune recovery"),
+            ("💉", "Review vaccines"),
+            ("🌱", "Long-term follow-up"),
+        ],
+        "tests": [
+            "Disease surveillance",
+            "Chronic GVHD monitoring",
+            "Long-term health screening",
+        ],
+        "questions": [
+            "What follow-up is needed?",
+            "When should vaccines be reviewed?",
+        ],
+        "detail": (
+            "Long-term monitoring includes immune recovery, "
+            "GVHD, disease surveillance, and late effects."
+        ),
+        "terms": {
+            "Chronic GVHD": "GVHD that can affect multiple organs over time.",
+            "Immune recovery": "The gradual rebuilding of immune defenses after transplant.",
+        },
+    },
 ]
 
 
 # ============================================================
-# 3. STYLING
+# 3. CROSS-PLATFORM CSS
 # ============================================================
 
 JOURNEY_CSS = """
 <style>
-.journey-illustration {
-    padding: 28px 14px;
+
+/* Keep button contrast explicit across light/dark themes. */
+
+.st-key-journey_stage_cards button[kind="secondary"],
+.st-key-journey_stage_cards button[data-testid="stBaseButton-secondary"] {
+    background: #FFFFFF !important;
+    color: #18354A !important;
+    border: 1.5px solid #D9E8ED !important;
+    border-radius: 16px !important;
+    min-height: 116px !important;
+    width: 100% !important;
+    white-space: pre-line !important;
+    box-shadow: 0 6px 18px rgba(21,57,75,0.07) !important;
+}
+
+.st-key-journey_stage_cards button[kind="primary"],
+.st-key-journey_stage_cards button[data-testid="stBaseButton-primary"] {
+    background: #087E83 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #087E83 !important;
+    border-radius: 16px !important;
+    min-height: 116px !important;
+    width: 100% !important;
+    white-space: pre-line !important;
+    box-shadow: 0 8px 22px rgba(8,126,131,0.22) !important;
+}
+
+.st-key-journey_stage_cards button p,
+.st-key-journey_stage_cards button span,
+.st-key-journey_stage_cards button div {
+    color: inherit !important;
+    opacity: 1 !important;
+    font-weight: 700 !important;
+    line-height: 1.45 !important;
+    text-align: center !important;
+}
+
+.st-key-journey_stage_cards button:hover {
+    transform: translateY(-2px);
+    border-color: #079A98 !important;
+}
+
+.jv-panel {
+    background: linear-gradient(125deg, #F2FAFB, #FFFFFF);
+    border: 1px solid #D8ECEC;
     border-radius: 22px;
-    border: 1px solid #d8e9eb;
-    background: linear-gradient(120deg, #e6f7f4, #edf4ff);
-    text-align: center;
-    min-height: 235px;
+    padding: 23px 25px;
+    margin: 14px 0 18px;
 }
 
-.journey-illustration .big-icon {
-    font-size: 85px;
-    margin-bottom: 15px;
+.jv-hero {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
 }
 
-.journey-illustration .heading {
-    font-size: 17px;
+.jv-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 94px;
+    height: 94px;
+    border-radius: 25px;
+    font-size: 49px;
+    flex-shrink: 0;
+}
+
+.jv-title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
     font-weight: 800;
-    color: #16485b;
+    color: #163B4B;
+    line-height: 1.15;
 }
 
-.journey-illustration .subheading {
-    font-size: 12px;
-    color: #68818d;
-    margin-top: 12px;
+.jv-subtitle {
+    font-size: 1rem;
+    color: #52717B;
+    margin-top: 8px;
 }
+
+.jv-eyebrow {
+    font-size: 0.76rem;
+    letter-spacing: 0.13em;
+    font-weight: 800;
+    color: #087E83;
+    margin-bottom: 9px;
+}
+
+.jv-step {
+    border-radius: 14px;
+    background: #E8F6F5;
+    padding: 14px 9px;
+    color: #145B61;
+    text-align: center;
+    font-weight: 700;
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.jv-step-icon {
+    font-size: 27px;
+}
+
+.jv-arrow {
+    text-align: center;
+    color: #159C97;
+    font-size: 1.5rem;
+    padding-top: 28px;
+}
+
+@media(max-width: 650px) {
+    .jv-panel {
+        padding: 17px;
+    }
+
+    .jv-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 35px;
+    }
+
+    .jv-step {
+        padding: 10px 5px;
+        font-size: 12px;
+    }
+}
+
 </style>
 """
 
 
 # ============================================================
-# 4. NAVIGATION CALLBACKS
+# 4. STAGE NAVIGATION CALLBACKS
 # ============================================================
 
-def change_stage(state_key, direction, total_stages):
-    """
-    Move forward or backward safely.
+def select_journey_stage(state_key, stage_index):
+    """Select a stage before the next Streamlit render."""
+    st.session_state[state_key] = stage_index
 
-    Called before Streamlit recreates the selectbox.
-    """
 
+def move_journey_stage(state_key, direction, total_stages):
+    """Move to the previous or next stage safely."""
     current = st.session_state.get(state_key, 0)
 
     new_stage = current + direction
@@ -596,308 +620,341 @@ def change_stage(state_key, direction, total_stages):
     )
 
 
-def select_journey_stage(state_key, stage_index):
-    """
-    Select a stage by clicking its visual card.
-    """
+# ============================================================
+# 5. VISUAL STAGE HEADER
+# ============================================================
 
-    st.session_state[state_key] = stage_index
+def render_stage_header(stage, selected, total, is_allo):
+
+    transplant_label = (
+        "DONOR TRANSPLANT"
+        if is_allo
+        else "OWN-CELL TRANSPLANT"
+    )
+
+    html = (
+        '<div class="jv-panel">'
+        '<div class="jv-eyebrow">'
+        f'STAGE {selected + 1} OF {total} · {transplant_label}'
+        '</div>'
+        '<div class="jv-hero">'
+        f'<div class="jv-icon" style="background:{stage["color"]}">'
+        f'{stage["icon"]}'
+        '</div>'
+        '<div>'
+        f'<div class="jv-title">{escape(stage["name"])}</div>'
+        f'<div class="jv-subtitle">{escape(stage["short"])}</div>'
+        '</div>'
+        '</div>'
+        '</div>'
+    )
+
+    st.markdown(
+        html,
+        unsafe_allow_html=True
+    )
 
 
 # ============================================================
-# 5. RENDER INTERACTIVE JOURNEY
+# 6. THREE-STEP VISUAL PROCESS
+# ============================================================
+
+def render_visual_steps(stage):
+
+    st.markdown("#### What Happens at This Stage?")
+
+    columns = st.columns(
+        [4, 1, 4, 1, 4],
+        gap="small"
+    )
+
+    for index, (icon, label) in enumerate(stage["steps"]):
+
+        with columns[index * 2]:
+
+            html = (
+                '<div class="jv-step">'
+                f'<div class="jv-step-icon">{icon}</div>'
+                f'<div>{escape(label)}</div>'
+                '</div>'
+            )
+
+            st.markdown(
+                html,
+                unsafe_allow_html=True
+            )
+
+        if index < 2:
+
+            with columns[index * 2 + 1]:
+
+                st.markdown(
+                    '<div class="jv-arrow">→</div>',
+                    unsafe_allow_html=True
+                )
+
+
+# ============================================================
+# 7. COMPACT INFORMATION PANELS
+# ============================================================
+
+def render_information_panels(stage):
+
+    left, right = st.columns(
+        2,
+        gap="medium"
+    )
+
+    with left:
+
+        with st.container(border=True):
+
+            st.markdown("**🔬 Common Checks**")
+
+            for item in stage["tests"]:
+                st.markdown(f"- {item}")
+
+    with right:
+
+        with st.container(border=True):
+
+            st.markdown("**💬 Ask Your Care Team**")
+
+            for question in stage["questions"]:
+                st.markdown(f"- {question}")
+
+
+# ============================================================
+# 8. EXPANDABLE MEDICAL INFORMATION
+# ============================================================
+
+def render_more_information(stage, phases, selected):
+
+    with st.expander(
+        "📖 More Details & Medical Terms",
+        expanded=False
+    ):
+
+        st.markdown("#### Stage Overview")
+
+        st.write(stage["detail"])
+
+        if phases and selected < len(phases):
+
+            phase = phases[selected]
+
+            if len(phase) > 1:
+                st.write(phase[1])
+
+        st.markdown("#### Medical Terms")
+
+        for term, explanation in stage["terms"].items():
+
+            st.markdown(
+                f"**{term}:** {explanation}"
+            )
+
+        st.info(
+            "These explanations are educational. "
+            "Your transplant team determines the "
+            "appropriate tests and treatment plan."
+        )
+
+
+# ============================================================
+# 9. MAIN RENDER FUNCTION
 # ============================================================
 
 def render_journey(phases, is_allo):
     """
-    Main function called from app.py:
+    Render the complete interactive transplant journey.
 
-        render_journey(phases, is_allo)
-
+    Parameters
+    ----------
     phases:
-        Existing stage summaries in app.py.
+        Existing journey phase tuples from app.py.
 
     is_allo:
-        True  = Allogeneic
-        False = Autologous
+        True for allogeneic transplant.
+        False for autologous transplant.
     """
 
+    stages = ALLO if is_allo else AUTO
+
+    total_stages = len(stages)
+
+    state_key = (
+        "journey_allo_select"
+        if is_allo
+        else "journey_auto_select"
+    )
+
+    # Initialize state before creating the selectbox.
+    if state_key not in st.session_state:
+        st.session_state[state_key] = 0
+
+    current = st.session_state[state_key]
+
+    if not isinstance(current, int):
+        current = 0
+
+    st.session_state[state_key] = max(
+        0,
+        min(total_stages - 1, current)
+    )
+
+    # Apply journey-specific styling.
     st.markdown(
         JOURNEY_CSS,
         unsafe_allow_html=True
     )
 
-    if is_allo:
-        items = ALLO
-        state_key = "journey_allo_select"
-    else:
-        items = AUTO
-        state_key = "journey_auto_select"
-
-    total_stages = len(items)
-
-    # Initialize session state before creating widgets
-    if state_key not in st.session_state:
-        st.session_state[state_key] = 0
-
-    if not 0 <= st.session_state[state_key] < total_stages:
-        st.session_state[state_key] = 0
-
     # --------------------------------------------------------
-    # STAGE DROPDOWN
+    # STAGE SELECTOR
     # --------------------------------------------------------
-
-    st.markdown("### 🧭 Interactive Transplant Journey")
-
-    st.caption(
-        "Click any stage card or use the dropdown "
-        "to explore the transplant journey."
-    )
 
     selected = st.selectbox(
-        "Select a stage to explore",
+        "Jump to a Stage",
         options=list(range(total_stages)),
         format_func=lambda i: (
-            f"Stage {i + 1}: {items[i]['name']}"
+            f"Stage {i + 1}: {stages[i]['name']}"
         ),
         key=state_key
     )
 
+    stage = stages[selected]
+
     # --------------------------------------------------------
-    # PROGRESS PERCENTAGE
+    # PROGRESS
     # --------------------------------------------------------
 
-    current_stage = selected + 1
+    st.markdown("#### Journey Guide Position")
 
-    percentage = round(
-        (current_stage / total_stages) * 100
+    st.progress(
+        (selected + 1) / total_stages
     )
-
-    st.markdown("### Journey Progress")
-
-    progress_col, percent_col = st.columns(
-        [5, 1],
-        vertical_alignment="center"
-    )
-
-    with progress_col:
-        st.progress(
-            current_stage / total_stages
-        )
-
-    with percent_col:
-        st.markdown(
-            f"### {percentage}%"
-        )
 
     st.caption(
-        f"Stage {current_stage} of {total_stages} "
-        "in the educational journey."
-    )
-
-    st.info(
-        "The percentage represents how far you have navigated "
-        "through this educational guide. "
-        "It does not represent medical treatment completion "
-        "or recovery."
+        f"Viewing Stage {selected + 1} of {total_stages}. "
+        "This shows navigation through the guide, "
+        "not medical treatment progress."
     )
 
     # --------------------------------------------------------
     # CLICKABLE STAGE CARDS
     # --------------------------------------------------------
 
-    st.markdown("### Click a Stage to View Details")
+    st.markdown("#### Click a Stage to View Details")
 
-    cards_per_row = 4
+    with st.container(
+        key="journey_stage_cards"
+    ):
 
-    for start in range(0, total_stages, cards_per_row):
+        cards_per_row = 4
 
-        columns = st.columns(
-            cards_per_row,
-            gap="small"
-        )
+        for start in range(
+            0,
+            total_stages,
+            cards_per_row
+        ):
 
-        for col_index in range(cards_per_row):
+            columns = st.columns(
+                cards_per_row,
+                gap="small"
+            )
 
-            stage_index = start + col_index
+            for offset, col in enumerate(columns):
 
-            if stage_index >= total_stages:
-                continue
+                stage_index = start + offset
 
-            stage = items[stage_index]
+                if stage_index >= total_stages:
+                    continue
 
-            with columns[col_index]:
+                item = stages[stage_index]
 
-                is_selected = (
-                    stage_index == selected
-                )
+                with col:
 
-                button_label = (
-                    f"{stage['icon']}\n\n"
-                    f"Stage {stage_index + 1}\n\n"
-                    f"{stage['name']}"
-                )
-
-                st.button(
-                    button_label,
-                    key=f"{state_key}_card_{stage_index}",
-                    use_container_width=True,
-                    type=(
-                        "primary"
-                        if is_selected
-                        else "secondary"
-                    ),
-                    on_click=select_journey_stage,
-                    args=(
-                        state_key,
-                        stage_index
+                    is_selected = (
+                        stage_index == selected
                     )
-                )
+
+                    label = (
+                        f'{item["icon"]}\n'
+                        f'Stage {stage_index + 1}\n'
+                        f'{item["name"]}'
+                    )
+
+                    st.button(
+                        label,
+                        key=(
+                            f"{state_key}_card_"
+                            f"{stage_index}"
+                        ),
+                        use_container_width=True,
+                        type=(
+                            "primary"
+                            if is_selected
+                            else "secondary"
+                        ),
+                        on_click=select_journey_stage,
+                        args=(
+                            state_key,
+                            stage_index
+                        )
+                    )
 
     st.caption(
-        "The highlighted card shows your currently selected stage."
+        "Select any stage above to explore its details."
     )
-
-    # --------------------------------------------------------
-    # CURRENT STAGE DETAILS
-    # --------------------------------------------------------
-
-    stage = items[selected]
-
-    icon = stage["icon"]
-    stage_name = stage["name"]
-    stage_heading = stage["heading"]
 
     st.divider()
 
-    st.markdown(
-        f"## Stage {selected + 1}: {stage_name}"
+    # --------------------------------------------------------
+    # VISUAL STAGE HEADER
+    # --------------------------------------------------------
+
+    render_stage_header(
+        stage,
+        selected,
+        total_stages,
+        is_allo
     )
 
-    illustration_col, details_col = st.columns(
-        [1, 2],
-        gap="large"
+    # --------------------------------------------------------
+    # VISUAL PROCESS
+    # --------------------------------------------------------
+
+    render_visual_steps(stage)
+
+    # --------------------------------------------------------
+    # SHORT DESCRIPTION
+    # --------------------------------------------------------
+
+    st.caption(
+        stage["detail"]
     )
 
     # --------------------------------------------------------
-    # STAGE ILLUSTRATION
+    # INFORMATION PANELS
     # --------------------------------------------------------
 
-    with illustration_col:
-
-        illustration_html = (
-            '<div class="journey-illustration" '
-            f'role="img" aria-label="{escape(stage_name)}">'
-            f'<div class="big-icon">{icon}</div>'
-            f'<div class="heading">{escape(stage_heading)}</div>'
-            '<div class="subheading">'
-            'StemBridge Educational Journey'
-            '</div>'
-            '</div>'
-        )
-
-        st.markdown(
-            illustration_html,
-            unsafe_allow_html=True
-        )
+    render_information_panels(stage)
 
     # --------------------------------------------------------
-    # STAGE EXPLANATION
+    # EXPANDABLE DETAILS
     # --------------------------------------------------------
 
-    with details_col:
-
-        st.markdown(
-            "### What Happens During This Stage?"
-        )
-
-        st.markdown(
-            stage["description"]
-        )
-
-        st.markdown(
-            "### What to Expect"
-        )
-
-        if selected < len(phases):
-            st.write(
-                phases[selected][1]
-            )
-
-    # --------------------------------------------------------
-    # EDUCATIONAL TABS
-    # --------------------------------------------------------
-
-    st.markdown(
-        "### Learn More About This Stage"
+    render_more_information(
+        stage,
+        phases,
+        selected
     )
-
-    tab1, tab2, tab3, tab4 = st.tabs([
-        "🧪 Tests & Monitoring",
-        "❓ Questions to Ask",
-        "📖 Medical Terms",
-        "🔗 Trusted Resources"
-    ])
-
-    with tab1:
-
-        st.markdown(
-            "#### Common Tests and Monitoring"
-        )
-
-        st.markdown(
-            stage["tests"]
-        )
-
-    with tab2:
-
-        st.markdown(
-            "#### Questions for Your Care Team"
-        )
-
-        st.markdown(
-            stage["questions"]
-        )
-
-    with tab3:
-
-        st.markdown(
-            "#### Understanding Medical Terms"
-        )
-
-        st.markdown(
-            stage["terms"]
-        )
-
-    with tab4:
-
-        st.write(
-            "Explore educational information "
-            "from trusted organizations."
-        )
-
-        st.link_button(
-            "National Cancer Institute ↗",
-            "https://www.cancer.gov/about-cancer/treatment/types/stem-cell-transplant"
-        )
-
-        st.link_button(
-            "American Cancer Society ↗",
-            "https://www.cancer.org/cancer/treatment-types/stem-cell-transplant.html"
-        )
-
-        if is_allo:
-
-            st.link_button(
-                "NMDP Patient Resources ↗",
-                "https://www.nmdp.org/patients"
-            )
-
-    # --------------------------------------------------------
-    # PREVIOUS AND NEXT STAGE BUTTONS
-    # --------------------------------------------------------
 
     st.divider()
+
+    # --------------------------------------------------------
+    # PREVIOUS / NEXT BUTTONS
+    # --------------------------------------------------------
 
     previous_col, next_col = st.columns(2)
 
@@ -908,7 +965,7 @@ def render_journey(phases, is_allo):
             key=f"{state_key}_previous",
             disabled=(selected == 0),
             use_container_width=True,
-            on_click=change_stage,
+            on_click=move_journey_stage,
             args=(
                 state_key,
                 -1,
@@ -926,7 +983,7 @@ def render_journey(phases, is_allo):
             ),
             use_container_width=True,
             type="primary",
-            on_click=change_stage,
+            on_click=move_journey_stage,
             args=(
                 state_key,
                 1,
@@ -934,28 +991,52 @@ def render_journey(phases, is_allo):
             )
         )
 
-    # --------------------------------------------------------
-    # COMPLETE JOURNEY SUMMARY
-    # --------------------------------------------------------
-
-    with st.expander(
-        "📋 View All Journey Stages"
-    ):
-
-        for index, item in enumerate(items):
-
-            st.markdown(
-                f"**{index + 1}. "
-                f"{item['icon']} "
-                f"{item['name']}**"
-            )
-
-            st.caption(
-                item["heading"]
-            )
-
     st.caption(
-        "StemBridge is an educational prototype. "
-        "The information is not a substitute "
-        "for advice from the transplant team."
+        "StemBridge is an educational guide. "
+        "The sequence, tests, and timing may differ "
+        "for individual patients. Follow your "
+        "transplant team's instructions."
+    )
+
+
+# ============================================================
+# 10. STANDALONE TEST
+# ============================================================
+
+if __name__ == "__main__":
+
+    st.set_page_config(
+        page_title="StemBridge Journey",
+        page_icon="🧬",
+        layout="wide"
+    )
+
+    st.title("🧬 StemBridge Transplant Journey")
+
+    transplant_type = st.radio(
+        "Select Transplant Type",
+        [
+            "Autologous",
+            "Allogeneic"
+        ],
+        horizontal=True
+    )
+
+    is_allo = (
+        transplant_type == "Allogeneic"
+    )
+
+    stages = ALLO if is_allo else AUTO
+
+    example_phases = [
+        (
+            stage["name"],
+            stage["detail"]
+        )
+        for stage in stages
+    ]
+
+    render_journey(
+        example_phases,
+        is_allo
     )
